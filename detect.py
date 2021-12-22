@@ -17,6 +17,7 @@ import os
 import sys
 from pathlib import Path
 import json
+import numpy as np
 
 import cv2
 import torch
@@ -142,8 +143,8 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
                 # Copy the classes and original bounding boxes without any modification
-                bounds = det[:, :4].copy().tolist()
-                detected_classes = det[:, -1].tolist()
+                bounds = np.array(det[:, :4].copy()).tolist()
+                detected_classes = np.array(det[:, -1]).tolist()
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
 
@@ -155,7 +156,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                               "image_ratio": None,
                               "bounds": bounds,
                               "classes": detected_classes,
-                              "classes_names": names.tolist()
+                              "classes_names": np.array(names).tolist()
                               }
 
                 # Write the Json Results to a file
