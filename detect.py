@@ -143,7 +143,10 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
                 # Copy the classes and original bounding boxes without any modification
-                bounds = det[:, :4].clone().tolist()
+                # bounds = det[:, :4].clone().tolist()
+                bounds = det[:, :4].clone()
+                bounds[:, [0, 2]] /= (im0.shape[1] / im.shape[3])  # x
+                bounds[:, [1, 3]] /= (im0.shape[0] / im.shape[2])  # y
                 detected_classes = det[:, -1].clone().tolist()
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
@@ -151,10 +154,10 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                 # Make the Json Config
                 detections = {"image_id": i,
                               "image_name": p.name,
-                              "image_height": im.shape[2],
-                              "image_width": im.shape[3],
+                              "image_height": im0.shape[0],
+                              "image_width": im0.shape[1],
                               "image_ratio": None,
-                              "bounds": bounds,
+                              "bounds": bounds.tolist(),
                               "classes": detected_classes,
                               "classes_names": names
                               }
