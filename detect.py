@@ -159,7 +159,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                               }
 
                 # Write the Json Results to a file
-                with open(json_path + '.json', 'a') as f:
+                with open(json_path + '.json', 'w') as f:
                     json.dump(detections, f, indent=4)
 
                 # Print results
