@@ -139,7 +139,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
-            print("Image Shape: ", im0.shape)
+
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
                 # Copy the classes and original bounding boxes without any modification
