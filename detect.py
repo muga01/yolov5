@@ -143,8 +143,8 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
                 # Copy the classes and original bounding boxes without any modification
-                bounds = np.array(det[:, :4].copy()).tolist()
-                detected_classes = np.array(det[:, -1]).tolist()
+                bounds = det[:, :4].clone().tolist()
+                detected_classes = det[:, -1].clone().tolist()
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
 
@@ -156,7 +156,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                               "image_ratio": None,
                               "bounds": bounds,
                               "classes": detected_classes,
-                              "classes_names": np.array(names).tolist()
+                              "classes_names": names.tolist()
                               }
 
                 # Write the Json Results to a file
