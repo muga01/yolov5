@@ -145,8 +145,8 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                 # Copy the classes and original bounding boxes without any modification
                 # bounds = det[:, :4].clone().tolist()
                 bounds = det[:, :4].clone()
-                bounds[:, [0, 2]] /= (im0.shape[1] / im.shape[3])  # x
-                bounds[:, [1, 3]] /= (im0.shape[0] / im.shape[2])  # y
+                bounds[:, [0, 2]] *= (im0.shape[1] / im.shape[3])  # x
+                bounds[:, [1, 3]] *= (im0.shape[0] / im.shape[2])  # y
                 detected_classes = det[:, -1].clone().tolist()
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
