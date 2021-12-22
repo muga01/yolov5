@@ -151,8 +151,8 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                 # Make the Json Config
                 detections = {"image_id": i,
                               "image_name": p.name,
-                              "image_height": im.shape[3],
-                              "image_width": im.shape[2],
+                              "image_height": im.shape[2],
+                              "image_width": im.shape[3],
                               "image_ratio": None,
                               "bounds": bounds,
                               "classes": detected_classes,
