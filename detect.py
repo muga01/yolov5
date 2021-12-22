@@ -156,7 +156,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                               "image_ratio": None,
                               "bounds": bounds,
                               "classes": detected_classes,
-                              "classes_names": names.tolist()
+                              "classes_names": names
                               }
 
                 # Write the Json Results to a file
