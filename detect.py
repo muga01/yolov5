@@ -16,6 +16,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
+import json
 
 import cv2
 import torch
@@ -134,13 +135,32 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # im.jpg
             txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
+            json_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.json
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
+                # Copy the classes and original bounding boxes without any modification
+                bounds = det[:, :4].copy().tolist()
+                detected_classes = det[:, -1].tolist()
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
+
+                # Make the Json Config
+                detections = {"image_id": i,
+                              "image_name": p.name.split("/")[-1],
+                              "image_height": im.shape[1],
+                              "image_width": im.shape[0],
+                              "image_ratio": None,
+                              "bounds": bounds,
+                              "classes": detected_classes,
+                              "classes_names": names.tolist()
+                              }
+
+                # Write the Json Results to a file
+                with open(json_path + '.json', 'a') as f:
+                    json.dump(detections, f, indent=4)
 
                 # Print results
                 for c in det[:, -1].unique():
