@@ -159,9 +159,11 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                               "classes_names": names
                               }
 
-                # Write the Json Results to a file
-                with open(json_path + '.json', 'w') as f:
-                    json.dump(detections, f, indent=4)
+                print(detections)
+
+                # # Write the Json Results to a file
+                # with open(json_path + '.json', 'w') as f:
+                #     json.dump(detections, f, indent=4)
 
                 # Print results
                 for c in det[:, -1].unique():
